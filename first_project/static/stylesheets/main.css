@@ -1,0 +1,13 @@
+html{
+  background-color: #c2d6d6;
+  background-repeat: no-repeat;
+}
+
+div{
+  border-style: groove;
+  border-width: 3px;
+}
+
+p{
+  font-family: "courier new", sans-serif;
+}
