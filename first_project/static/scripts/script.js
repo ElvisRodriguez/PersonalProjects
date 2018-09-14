@@ -1,2 +1,2 @@
-let d = new Date();
-alert("Today's date is " + d);
+//let d = new Date();
+//console.log("Today's date is " + d);

@@ -8,9 +8,30 @@
   <body>
     <div class="opening">
       <p class="intro">
-        The beginning of a project. Not sure what it will turn out to be.
+        Truth Table Generator
       </p>
     </div>
+    <div class="data_input">
+      <form method="post">
+        Table Values <input type="text" name="values">
+        <input type="submit" name= "values" value="Submit"/>
+      </form>
+    </div>
+    <br/>
+      <table class="truth_table">
+        <tr>
+        {%for row in data%}
+          <th>{{row}}</th>
+        {%endfor%}
+        </tr>
+        {%for num in nums%}
+        <tr>
+          {%for key in data%}
+            <td>{{table[key][num]}}</td>
+          {%endfor%}
+        </tr>
+        {%endfor%}
+      </table>
     <script type="text/javascript" src="/static/scripts/script.js"></script>
   </body>
  </html>
