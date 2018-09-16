@@ -11,16 +11,16 @@ class TruthTable:
             for j in range(i + 1):
                 alternate /= 2
             count = 0
-            bool_exp = 1
+            bool_exp = True
             for h in range(max_length):
                 table[self.values[i]].append(bool_exp)
                 count += 1
                 if count == alternate:
                     count = 0
-                    if bool_exp == 1:
-                        bool_exp = 0
+                    if bool_exp:
+                        bool_exp = False
                     else:
-                        bool_exp = 1
+                        bool_exp = True
         return table
 
 
