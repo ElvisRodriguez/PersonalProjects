@@ -9,7 +9,7 @@ def home():
     data = []
     for char in values:
         if char.isalpha():
-            if char not in data:
+            if char not in data and len(data) < 10:
                 data.append(char.upper())
     data.sort()
     table = TruthTable(data)
