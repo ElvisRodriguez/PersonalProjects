@@ -7,16 +7,14 @@ app = Flask(__name__)
 def home():
     values = request.form.get('values', '')
     data = []
-    for char in values:
+    for char in str(values):
         if char.isalpha():
-            if char not in data and len(data) < 10:
+            if char not in data and len(data) < 4:
                 data.append(char.upper())
-    data.sort()
+    nums = [x for x in range(2 ** len(data))]
     table = TruthTable(data)
-    nums = []
-    for i in range(2 ** len(data)):
-        nums.append(i)
-    return render_template('homepage.html', table=table.create_table(),
+    data = table.sort_columns()
+    return render_template('homepage.html', table=table.logic_table(),
                            data=data, nums=nums)
 
 if __name__ == '__main__':

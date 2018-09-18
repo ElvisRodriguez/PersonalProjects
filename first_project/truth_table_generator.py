@@ -23,6 +23,53 @@ class TruthTable:
                         bool_exp = True
         return table
 
+    def logic_table(self):
+        table = self.create_table()
+        if len(table.keys()) < 2:
+            return table
+        and_title = ""
+        or_title = ""
+        sort_keys = sorted(table.keys())
+        for i in range(len(sort_keys)):
+            if i == len(sort_keys) - 1:
+                and_title += sort_keys[i]
+                or_title += sort_keys[i]
+            else:
+                and_title += sort_keys[i] + " AND "
+                or_title += sort_keys[i] + " OR "
+        table[and_title] = []
+        table[or_title] = []
+        for i in range(len(table[sort_keys[0]])):
+            vals = []
+            for key in sort_keys:
+                vals.append(table[key][i])
+            table[and_title].append(self._and_gate(vals))
+            table[or_title].append(self._or_gate(vals))
+        return table
+
+    def sort_columns(self):
+        table = self.logic_table()
+        data = []
+        logic = []
+        for key in table.keys():
+            if len(key) > 1:
+                logic.append(key)
+            else:
+                data.append(key)
+        return sorted(data) + sorted(logic)
+
+    def _and_gate(self, values):
+        for arg in values:
+            if arg == False:
+                return False
+        return True
+
+    def _or_gate(self, values):
+        for arg in values:
+            if arg == True:
+                return True
+        return False
+
 
 def format_table(table):
     sorted_keys = sorted(table.keys())
