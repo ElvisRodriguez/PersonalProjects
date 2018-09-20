@@ -9,9 +9,11 @@ class LinkedList:
 
     def print_list(self):
         current_node = self.head
+        result = []
         while current_node:
-            print(current_node.data)
+            result.append(current_node.data)
             current_node = current_node.next
+        print(result)
 
     def append(self, data):
         new_node = Node(data)
@@ -138,10 +140,159 @@ class LinkedList:
         self.head = _reverse_recursive(previous_node=None,
                                        current_node=self.head)
 
+    def merge_sorted(self, llist): #merge list in place
+        p = self.head
+        q = llist.head
+        s = None
+        if not p:
+            return q
+        if not q:
+            return p
+        if p and q:
+            if p.data < q.data:
+                s = p
+                p = s.next
+            else:
+                s = q
+                q = s.next
+            new_head = s
+        while p and q:
+            if p.data < q.data:
+                s.next = p
+                s = p
+                p = s.next
+            else:
+                s.next = q
+                s = q
+                q = s.next
+        if not p:
+            s.next = q
+        if not q:
+            s.next = p
+        return new_head
 
-llist = LinkedList()
-llist.append('A')
-llist.append('B')
-llist.append('C')
-llist.append('D')
-llist.print_list()
+    def remove_duplicates(self):
+        logbook = {}
+        current = self.head
+        previous = None
+        while current:
+            if current.data in logbook:
+                previous.next = current.next
+                current = None
+            else:
+                logbook[current.data] = 1
+                previous = current
+            current = previous.next
+
+    def print_nth_from_last(self, n):
+        p = self.head
+        q = self.head
+        count = 0
+        while q and count < n:
+            q = q.next
+            count += 1
+        if not q:
+            print(n, "is greater than the number of nodes - 1 in the list")
+            return
+        while q:
+            p = p.next
+            q = q.next
+        print(p.data)
+
+    def count_occurences_iterative(self, data):
+        current = self.head
+        count = 0
+        while current:
+            if current.data == data:
+                count += 1
+            current = current.next
+        return count
+
+    def count_occurences_recursive(self, node, data):
+        if not node:
+            return 0
+        if node.data == data:
+            return 1 + self.count_occurences_recursive(node.next, data)
+        else:
+            return self.count_occurences_recursive(node.next, data)
+
+    def rotate(self, k):
+        count = 1
+        p = self.head
+        q = self.head
+        while p and count < k:
+            p = p.next
+            q = p
+            count += 1
+        if not p:
+            return
+        while q.next:
+            q = q.next
+        q.next = self.head
+        self.head = p.next
+        p.next = None
+
+    def is_palindrome(self):
+        if not self.head:
+            return
+        string = ""
+        current = self.head
+        while current:
+            string += str(current.data)
+            current = current.next
+        return string == string[::-1]
+
+    def move_tail_to_head(self):
+        previous = None
+        current = self.head
+        while current.next:
+            previous = current
+            current = current.next
+        previous.next = None
+        current.next = self.head
+        self.head = current
+
+    def sum_two_list(self, llist):
+        nums = ["", ""]
+        p = self.head
+        q = llist.head
+        while p and q:
+            nums[0] = str(p.data) + nums[0]
+            nums[1] = str(q.data) + nums[1]
+            if p:
+                p = p.next
+            if q:
+                q = q.next
+        return int(nums[0]) + int(nums[1])
+
+
+def merge_linked_list(llistA, llistB): #return a new, merged, sorted linked list
+    result = LinkedList()
+    current1 = llistA.head
+    current2 = llistB.head
+    while current1 and current2:
+        if current1.data < current2.data:
+            result.append(current1.data)
+            current1 = current1.next
+        else:
+            result.append(current2.data)
+            current2 = current2.next
+    while current1:
+        result.append(current1.data)
+        current1 = current1.next
+    while current2:
+        result.append(current2.data)
+        current2 = current2.next
+    return result
+
+def main():
+    llist = LinkedList()
+    llist_2 = LinkedList()
+    for num in [5, 6, 3]:
+        llist.append(num)
+    for num in [8, 4, 2]:
+        llist_2.append(num)
+    print(365 + 248)
+    print(llist.sum_two_list(llist_2))
+
+main()
