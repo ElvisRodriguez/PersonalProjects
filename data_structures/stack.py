@@ -43,14 +43,22 @@ def is_paren_balanced(paren_string):
     else:
         return False
 
-def main():
-    print(is_paren_balanced("()"))
-    print(is_paren_balanced("()()"))
-    print(is_paren_balanced("(({[]}))"))
-    print(is_paren_balanced("{[]}"))
-    print(is_paren_balanced("(()"))
-    print(is_paren_balanced("{\{\{)}]"))
-    print(is_paren_balanced("[][]]]"))
-    print(is_paren_balanced("))"))
+def int_to_binary(integer):
+    s = Stack()
+    while integer > 0:
+        remainder = integer % 2
+        s.push(remainder)
+        integer //= 2
+    binary_string = ""
+    while not s.is_empty():
+        binary_string += str(s.pop())
+    return binary_string
 
-main()
+def reverse_string(input_str):
+    s = Stack()
+    for char in input_str:
+        s.push(char)
+    input_str = ""
+    while not s.is_empty():
+        input_str += str(s.pop())
+    return input_str
