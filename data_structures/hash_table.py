@@ -8,10 +8,11 @@ def is_prime(integer):
     if integer % 2 == 0:
         return False
     n = int(math.sqrt(integer))
-    while n > 1:
-        if integer % n == 0:
+    k = 3
+    while k <= n:
+        if integer % k == 0:
             return False
-        n -= 1
+        k += 2
     return True
 
 class HashTable:
