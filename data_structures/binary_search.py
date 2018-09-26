@@ -41,27 +41,37 @@ class BST(object):
             return is_found
         return None
 
-    def print_tree(self, traversal, start):
+    def inorder(self, traversal, start):
         if start:
-            traversal = self.print_tree(traversal, start.left)
+            traversal = self.inorder(traversal, start.left)
             traversal.append(start.data)
-            traversal = self.print_tree(traversal, start.right)
+            traversal = self.inorder(traversal, start.right)
         return traversal
 
+    def _has_BST_property(self, traversal, start):
+        if start:
+            traversal = self._has_BST_property(traversal, start.left)
+            traversal.append(start.data)
+            traversal = self._has_BST_property(traversal, start.right)
+        return traversal
+
+    def has_BST_property(self):
+        traversed = self._has_BST_property([], self.root)
+        for i in range(len(traversed) - 1):
+            if traversed[i] > traversed[i+1]:
+                return False
+        return True
+
     def __str__(self):
-        result = self.print_tree([], self.root)
+        result = self.inorder([], self.root)
         return str(",".join(map(str, result)))
 
 
-def has_BST_property(tree, node):
-    pass
-
-def main():
+def binary_tree_sort(unsorted_list):
     tree = BST()
-    for num in [5,1,2,3,4,6,7,8,9]:
+    for num in unsorted_list:
         tree.insert(num)
-    for num in [1,2,3,4,5,6,7,8,9]:
-        print(tree.search(num))
-    print(tree)
+    return tree.inorder([], tree.root)
 
-main()
+test = [10, 1, 9, 2, 8, 3, 7, 4, 6, 5]
+print(binary_tree_sort(test))
