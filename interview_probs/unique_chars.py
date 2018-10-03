@@ -12,12 +12,11 @@ Upper and lower case characters are treated as the same character, e.g. A == a
 
 def is_unique(string):
     string = string.lower()
-    chars = ""
-    for char in string:
-        if char in chars:
+    string = string.replace(' ', '')
+    for i in range(len(string)):
+        if string[i] in string[:i]:
             return False
-        chars += char
     return True
 
-for s in ['Python', 'Racecar', '12345', 'Aaron']:
+for s in ['Python', 'Racecar', '12345', 'Aaron', 'this is invalid']:
     print(is_unique(s))
