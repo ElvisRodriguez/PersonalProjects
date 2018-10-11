@@ -12,6 +12,10 @@ def import_data():
 def format_url(name):
     return 'https://www.smogon.com/dex/gs/pokemon/{name}/'.format(name=name)
 
+def format_string(string):
+    for tag in ['\\n', '<\/p>', '<p>', '<\/h1>', '<p>']:
+        string = string.replace(tag, '')
+
 def find_strategies(name):
     link = format_url(name)
     result = requests.get(link)
@@ -19,19 +23,19 @@ def find_strategies(name):
         print(name)
         src = result.content
         soup = BeautifulSoup(src, features='html.parser')
-        span_tag = soup.find('span', {'data-reactid':'.0.1.1.3.6.0.0'})
-        if span_tag is not None:
-            div_tag = soup.find('div', {'data-reactid':'.0.1.1.3.6.0.2'})
-            p_tags = div_tag.find_all('p')
-            with open('gsc_strats.txt', 'a') as file:
-                file.write(name + ':\n')
-                for p_tag in p_tags:
-                    file.write(p_tag.text + '\n\n')
-                file.close()
-        else:
-            with open('gsc_strats.txt', 'a') as file:
-                file.write(name + ':\nNo strategies\n\n')
-                file.close()
+        script_tag = soup.find('script')
+        script_tag = script_tag.next_element.string
+        script_string = str(script_tag)
+        script_string_list = script_string.split('<p>')
+        raw_strategy_text = []
+        i = 0
+        while i < len(script_string_list):
+            if 'overview' in script_string_list[i]:
+                raw_strategy_text.extend(script_string_list[i+1:])
+                break
+        for string in raw_strategy_text:
+            format_string(string)
+        print(raw_strategy_text)
 
 def find_all_strategies(names):
     for name in names:
@@ -39,4 +43,4 @@ def find_all_strategies(names):
 
 if __name__ == '__main__':
     data = import_data()
-    find_all_strategies(data)
+    find_all_strategies(['Alakazam'])
