@@ -66,28 +66,74 @@ class DoublyLinkedList(object):
                 new_node.next.prev = new_node
             self.size += 1
 
-    def print_list(self, reverse=False):
-        result = []
-        if reverse:
-            current = self.tail
-            while current is not None:
-                result.append(current.data)
-                current = current.prev
-            print(result)
+    def delete(self, target):
+        if self.head is None:
+            raise ValueError
+        if target == self.head.data and self.size == 1:
+            del self.head
         else:
             current = self.head
-            while current is not None:
-                result.append(current.data)
+            while current.next is not None and current.data != target:
                 current = current.next
-            print(result)
+            if current.next is None and current.data != target:
+                raise ValueError
+            elif current.next is None:
+                self.tail = current.prev
+                self.tail.next = None
+                del current
+            elif current.next is not None and current != self.head:
+                current.prev.next = current.next
+                current.next.prev = current.prev
+                del current
+            elif current == self.head:
+                self.head.prev = None
+                self.head = self.head.next
+                del current
+        self.size -= 1
+
+    def reverse(self):
+        if self.size > 1:
+            temp = None
+            current = self.head
+            while current is not None:
+                temp = current.prev
+                current.prev = current.next
+                current.next = temp
+                current = current.prev
+            if temp is not None:
+                self.tail = self.head
+                self.head = temp.prev
+
+    def remove_dupes(self):
+        temp = []
+        current = self.head
+        while current is not None:
+            if current.data in temp:
+                self.delete(current.data)
+            else:
+                temp.append(current.data)
+            current = current.next
+
+    def print_list(self):
+        result = []
+        current = self.head
+        while current is not None:
+            result.append(current.data)
+            current = current.next
+        return result
+
+    def __len__(self):
+        return self.size
+
+    def __str__(self):
+        result = self.print_list()
+        return '[{}]'.format(', '.join(result))
 
 
 if __name__ == '__main__':
     llist = DoublyLinkedList()
-    for char in 'ACDE':
+    for char in 'AABBCCD':
         llist.append(char)
-    llist.print_list()
-    print(llist.size)
-    llist.insert_at(target='C', data='B', before=True)
-    llist.print_list()
-    print(llist.size)
+    print(llist)
+    llist.remove_dupes()
+    print(llist)
